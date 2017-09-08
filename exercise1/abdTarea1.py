@@ -1,4 +1,3 @@
-import mmap
 import csv
 import email
 import sys
@@ -80,7 +79,7 @@ class ReadAndInsertFile(object):
         start_time = time.time()
         map_f = """
             function() {
-                emit(this.name_from, this.message.split(" ").length);
+                emit(this.email_from, this.message.split(" ").length);
             }
         """
 
@@ -90,10 +89,8 @@ class ReadAndInsertFile(object):
             }
         """
 
-        results = EmployeeMessages.objects.map_reduce(map_f, reduce_f, "word_count")
-        results = list(results)
+        EmployeeMessages.objects.map_reduce(map_f, reduce_f, "word_count")
         print("--- Map reduce: %s seconds ---" % (time.time() - start_time))
-        print("--- Employee with most words written: %s ---" % results[0].value)
 
     def start(self):
         start_time = time.time()
